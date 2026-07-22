@@ -197,19 +197,20 @@ module.exports = async (req, res) => {
     }
 
     if (hasContactEmail) {
-      console.log("Sending confirmation email to respondent:", contact.email);
-      try {
-        const confirmResp = await resend.emails.send({
-          from: process.env.FROM_EMAIL,
-          to: contact.email,
-          subject: "Thank You for Completing the MedNova Pharmacovigilance Survey",
-          html: buildConfirmationEmailHtml(contact)
-        });
-        console.log("Confirmation email response:", JSON.stringify(confirmResp));
-      } catch (err) {
-        console.error("Confirmation email error:", formatError(err));
-        throw err;
-      }
+      console.log("Confirmation email send to respondent is currently disabled.");
+      // Confirmation email disabled for now. Leave the internal notification email to info@mednovalife.com intact.
+      // try {
+      //   const confirmResp = await resend.emails.send({
+      //     from: process.env.FROM_EMAIL,
+      //     to: contact.email,
+      //     subject: "Thank You for Completing the MedNova Pharmacovigilance Survey",
+      //     html: buildConfirmationEmailHtml(contact)
+      //   });
+      //   console.log("Confirmation email response:", JSON.stringify(confirmResp));
+      // } catch (err) {
+      //   console.error("Confirmation email error:", formatError(err));
+      //   throw err;
+      // }
     } else {
       console.log("No contact email provided; skipping confirmation email.");
     }
