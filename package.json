@@ -1,0 +1,18 @@
+{
+  "name": "mednova-pv-survey",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "resend": "^1.1.0"
+  },
+  "scripts": {
+    "dev-local": "vercel dev --listen 3000 --local --yes",
+    "dev": "echo \"Use 'npm run dev-local' to start the local dev server.\" && exit 1"
+  },
+  "engines": {
+    "node": "18.x || 20.x"
+  },
+  "devDependencies": {
+    "vercel": "^56.5.0"
+  }
+}

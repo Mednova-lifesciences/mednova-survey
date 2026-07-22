@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pharmacovigilance Challenges & Needs Survey — MedNova Lifesciences</title>
+<link rel="icon" href="/assets/favicon.png" />
+<style>
+  /* ---------- MedNova design system: ink / moss / teal / amber ---------- */
+  :root{
+    --ink:#12211C;          /* deep near-black green */
+    --ink-2:#1B2E27;
+    --moss:#3E5A48;
+    --teal:#1E7F7A;
+    --teal-2:#2AA39C;
+    --amber:#D99A2B;
+    --amber-2:#E7B34A;
+    --paper:#F6F4ED;        /* warm off-white page */
+    --card:#FFFFFF;
+    --line:#E2DED2;
+    --muted:#5E6B62;
+    --text:#1D2A24;
+    --danger:#B4472E;
+    --radius:14px;
+    --shadow:0 1px 2px rgba(18,33,28,.04), 0 8px 24px rgba(18,33,28,.06);
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--text);
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 18px 120px}
+
+  /* ---------- Hero ---------- */
+  header.hero{
+    background:
+      radial-gradient(120% 120% at 100% 0%, rgba(42,163,156,.18), transparent 55%),
+      linear-gradient(180deg,var(--ink),var(--ink-2));
+    color:#EAF1EC;
+    padding:34px 20px 30px;
+    border-radius:0 0 26px 26px;
+    box-shadow:var(--shadow);
+  }
+  .hero-inner{max-width:680px;margin:0 auto}
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--amber-2);font-weight:600;margin-bottom:18px;
+  }
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 4px rgba(217,154,43,.18)}
+  .hero h1{
+    font-size:clamp(23px,6vw,31px);line-height:1.15;margin:0 0 10px;
+    font-weight:700;letter-spacing:-.01em;
+  }
+  .hero p{margin:0;color:#B9C8BF;font-size:15px;max-width:52ch}
+  .hero .meta{
+    margin-top:18px;display:flex;flex-wrap:wrap;gap:8px 18px;
+    font-size:12.5px;color:#93A79B;
+  }
+  .hero .meta span{display:inline-flex;align-items:center;gap:6px}
+  .hero .meta b{color:#CFE0D5;font-weight:600}
+
+  /* ---------- Progress ---------- */
+  .progress-shell{
+    position:sticky;top:0;z-index:20;
+    background:rgba(246,244,237,.92);backdrop-filter:blur(8px);
+    padding:10px 18px;border-bottom:1px solid var(--line);
+  }
+  .progress-inner{max-width:680px;margin:0 auto;display:flex;align-items:center;gap:12px}
+  .bar{flex:1;height:7px;border-radius:99px;background:#E3DFD3;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,var(--teal),var(--teal-2));transition:width .35s ease}
+  .progress-label{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap}
+
+  /* ---------- Sections ---------- */
+  section.block{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:22px 18px;margin-top:20px;
+  }
+  .eyebrow{
+    display:flex;align-items:center;gap:10px;margin-bottom:4px;
+    font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);font-weight:700;
+  }
+  .eyebrow .num{
+    font-variant-numeric:tabular-nums;color:var(--moss);
+    border:1.5px solid var(--line);border-radius:8px;padding:2px 7px;font-size:11px;
+  }
+  section.block > h2{font-size:18px;margin:2px 0 4px;letter-spacing:-.01em}
+  section.block > .sub{color:var(--muted);font-size:13.5px;margin:0 0 6px}
+
+  /* ---------- Questions ---------- */
+  .q{padding:18px 0;border-top:1px solid var(--line)}
+  .q:first-of-type{border-top:0;padding-top:8px}
+  .q .label{font-weight:600;font-size:15.5px;margin-bottom:3px;display:block}
+  .q .req{color:var(--danger);margin-left:2px}
+  .q .hint{color:var(--muted);font-size:12.5px;margin:0 0 12px}
+  .q .hint.tight{margin-bottom:10px}
+
+  /* Option cards (radio / checkbox) — big tap targets for mobile */
+  .options{display:grid;gap:8px}
+  .options.two{grid-template-columns:1fr 1fr}
+  @media(max-width:460px){.options.two{grid-template-columns:1fr}}
+  .opt{position:relative}
+  .opt input{position:absolute;opacity:0;inset:0;cursor:pointer}
+  .opt label{
+    display:flex;align-items:center;gap:11px;
+    border:1.5px solid var(--line);border-radius:11px;
+    padding:12px 13px;font-size:14.5px;cursor:pointer;
+    background:#FCFBF7;transition:border-color .15s,background .15s,box-shadow .15s;
+    min-height:48px;
+  }
+  .opt .box{
+    flex:none;width:20px;height:20px;border-radius:6px;border:1.8px solid #C3C9BF;
+    display:grid;place-items:center;transition:.15s;background:#fff;
+  }
+  .opt.radio .box{border-radius:50%}
+  .opt .box svg{width:12px;height:12px;opacity:0;transform:scale(.6);transition:.15s}
+  .opt input:checked + label{border-color:var(--teal);background:rgba(30,127,122,.07);box-shadow:0 0 0 1px var(--teal) inset}
+  .opt input:checked + label .box{background:var(--teal);border-color:var(--teal)}
+  .opt input:checked + label .box svg{opacity:1;transform:scale(1);color:#fff}
+  .opt input:focus-visible + label{outline:2px solid var(--amber);outline-offset:2px}
+
+  /* Scale (Likert) */
+  .scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:4px}
+  .scale .opt label{flex-direction:column;gap:6px;text-align:center;padding:11px 4px;min-height:auto}
+  .scale .opt label .n{font-size:18px;font-weight:700;color:var(--moss)}
+  .scale .opt label .t{font-size:10.5px;color:var(--muted);line-height:1.25}
+  .scale .opt input:checked + label .n{color:var(--teal)}
+  .scale-ends{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:7px}
+
+  /* Text inputs */
+  input[type=text],input[type=email],textarea,select{
+    width:100%;font:inherit;color:var(--text);background:#FCFBF7;
+    border:1.5px solid var(--line);border-radius:11px;padding:12px 13px;
+    transition:border-color .15s,box-shadow .15s;
+  }
+  textarea{min-height:92px;resize:vertical}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(30,127,122,.12)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:460px){.row2{grid-template-columns:1fr}}
+  .field-label{display:block;font-size:13px;font-weight:600;margin:0 0 6px;color:var(--ink-2)}
+
+  /* Contact consent card */
+  .consent{background:rgba(217,154,43,.09);border:1px solid rgba(217,154,43,.4);border-radius:12px;padding:14px}
+  .consent .eyebrow{color:var(--amber)}
+
+  /* Submit */
+  .submit-row{margin-top:24px;text-align:center}
+  button.send{
+    appearance:none;border:0;cursor:pointer;width:100%;
+    background:linear-gradient(180deg,var(--amber-2),var(--amber));
+    color:#2A1F05;font-weight:700;font-size:16px;letter-spacing:.01em;
+    padding:16px;border-radius:13px;box-shadow:0 6px 18px rgba(217,154,43,.32);
+    transition:transform .1s,filter .15s;
+  }
+  button.send:hover{filter:brightness(1.03)}
+  button.send:active{transform:translateY(1px)}
+  button.send:disabled{opacity:.6;cursor:default;filter:grayscale(.2)}
+  .fineprint{color:var(--muted);font-size:12px;margin-top:12px;line-height:1.5}
+  .err{color:var(--danger);font-size:13px;margin-top:10px;display:none}
+  .err.show{display:block}
+
+  /* Thank-you state */
+  .thanks{display:none;text-align:center;padding:46px 20px}
+  .thanks.show{display:block}
+  .thanks .check{
+    width:66px;height:66px;border-radius:50%;margin:0 auto 18px;
+    background:linear-gradient(180deg,var(--teal-2),var(--teal));display:grid;place-items:center;
+    box-shadow:0 8px 24px rgba(30,127,122,.35);
+  }
+  .thanks h2{font-size:23px;margin:0 0 8px}
+  .thanks p{color:var(--muted);max-width:44ch;margin:0 auto}
+
+  footer{max-width:680px;margin:26px auto 0;padding:0 18px;color:var(--muted);font-size:12px;text-align:center}
+  footer b{color:var(--moss)}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="brand"><span class="dot"></span> MedNova Lifesciences</div>
+    <h1>The State of Pharmacovigilance — Your Challenges & Needs</h1>
+    <p>A short, anonymous survey for PV, drug safety, regulatory and quality professionals across Nigeria. Your answers help shape support services that actually fit how you work.</p>
+    <div class="meta">
+      <span>⏱ <b>4–6 minutes</b></span>
+      <span>🔒 <b>Anonymous</b> unless you choose to share contact</span>
+      <span>📋 <b>18 questions</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="progress-shell">
+  <div class="progress-inner">
+    <div class="bar"><i id="barFill"></i></div>
+    <div class="progress-label"><span id="answered">0</span> of <span id="total">0</span> answered</div>
+  </div>
+</div>
+
+<div class="wrap">
+<form id="survey" novalidate>
+
+  <!-- ===================== SECTION 1 ===================== -->
+  <section class="block">
+    <div class="eyebrow"><span class="num">01</span> About you</div>
+    <h2>A little context</h2>
+    <p class="sub">So we can read the results by role and setting. No names required.</p>
+
+    <div class="q">
+      <span class="label">1. Which best describes your role?<span class="req">*</span></span>
+      <div class="options" data-single>
+        <!-- filled by JS-friendly markup below -->
+      </div>
+    </div>
+
+    <div class="q">
+      <span class="label">2. What type of organisation do you work in?<span class="req">*</span></span>
+      <div class="options two" data-single></div>
+    </div>
+
+    <div class="q">
+      <span class="label">3. Where in Nigeria are you primarily based?</span>
+      <select name="location" aria-label="Location in Nigeria">
+        <option value="">Select a location…</option>
+        <option>Lagos</option>
+        <option>Ogun</option>
+        <option>FCT (Abuja)</option>
+        <option>Rivers (Port Harcourt)</option>
+        <option>Kano</option>
+        <option>Oyo (Ibadan)</option>
+        <option>Anambra / South-East</option>
+        <option>Other state</option>
+        <option>Nationwide / multiple states</option>
+      </select>
+    </div>
+
+    <div class="q">
+      <span class="label">4. How many years have you worked in pharmacovigilance?</span>
+      <div class="options two" data-single></div>
+    </div>
+  </section>
+
+  <!-- ===================== SECTION 2 ===================== -->
+  <section class="block">
+    <div class="eyebrow"><span class="num">02</span> Your current PV setup</div>
+    <h2>Where things stand today</h2>
+    <p class="sub">A quick picture of your organisation's safety system.</p>
+
+    <div class="q">
+      <span class="label">5. Does your organisation have a functional PV system in place?<span class="req">*</span></span>
+      <div class="options" data-single></div>
+    </div>
+
+    <div class="q">
+      <span class="label">6. Do you have a designated QPPV or named local PV contact person?</span>
+      <p class="hint tight">As required under NAFDAC's Good Pharmacovigilance Practice directive.</p>
+      <div class="options two" data-single></div>
+    </div>
+
+    <div class="q">
+      <span class="label">7. Does your PV system have a Pharmacovigilance System Master File (PSMF)?</span>
+      <p class="hint tight">The master document that describes your pharmacovigilance system.</p>
+      <div class="options two" data-single></div>
+    </div>
+
+    <div class="q">
+      <span class="label">8. Does your quality system capture business continuity and data collection &amp; retrieval strategies?</span>
+      <div class="options two" data-single></div>
+    </div>
+
+    <div class="q">
+      <span class="label">9. What do you currently use to manage safety data?</span>
+      <p class="hint tight">Select all that apply.</p>
+      <div class="options" data-multi></div>
+    </div>
+
+    <div class="q">
+      <span class="label">10. How ready is your organisation for a NAFDAC PV inspection today?<span class="req">*</span></span>
+      <div class="scale" data-single data-scale></div>
+      <div class="scale-ends"><span>Not ready at all</span><span>Fully inspection-ready</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== SECTION 3 ===================== -->
+  <section class="block">
+    <div class="eyebrow"><span class="num">03</span> Challenges & pain points</div>
+    <h2>Where it gets hard</h2>
+    <p class="sub">This is the part we most want to understand.</p>
+
+    <div class="q">
+      <span class="label">11. Which PV activities give you the most trouble?</span>
+      <p class="hint tight">Select up to 4.</p>
+      <div class="options" data-multi data-max="4"></div>
+    </div>
+
+    <div class="q">
+      <span class="label">12. What most often gets in the way of doing PV well?</span>
+      <p class="hint tight">Select all that apply.</p>
+      <div class="options two" data-multi></div>
+    </div>
+
+    <div class="q">
+      <span class="label">13. In your own words, what is your single biggest PV pain point right now?<span class="req">*</span></span>
+      <textarea name="biggest_pain" placeholder="e.g. We can't keep up with case processing timelines, or we're unsure what NAFDAC actually expects at inspection…"></textarea>
+    </div>
+  </section>
+
+  <!-- ===================== SECTION 4 ===================== -->
+  <section class="block">
+    <div class="eyebrow"><span class="num">04</span> Services you'd value</div>
+    <h2>What would actually help</h2>
+    <p class="sub">If you could hand part of PV to a specialist partner — what would it be?</p>
+
+    <div class="q">
+      <span class="label">14. Which services would be most valuable to you?<span class="req">*</span></span>
+      <p class="hint tight">Select all that apply.</p>
+      <div class="options" data-multi></div>
+    </div>
+
+    <div class="q">
+      <span class="label">15. How would you prefer to work with a PV consulting partner?</span>
+      <div class="options two" data-single></div>
+    </div>
+
+    <div class="q">
+      <span class="label">16. What would make you choose one PV consulting firm over another?</span>
+      <textarea name="decision_factors" placeholder="e.g. NAFDAC track record, price, local presence, speed, references, sector experience…"></textarea>
+    </div>
+  </section>
+
+  <!-- ===================== SECTION 5 : TRAINING ===================== -->
+  <section class="block">
+    <div class="eyebrow"><span class="num">05</span> Training &amp; capacity building</div>
+    <h2>What your team would want to learn</h2>
+    <p class="sub">Training is one of the most requested forms of PV support in Nigeria. Tell us what would move the needle for your team.</p>
+
+    <div class="q">
+      <span class="label">17. Which PV training topics would be most valuable to your team?</span>
+      <p class="hint tight">Tuned to the Nigerian / NAFDAC context. Select all that apply.</p>
+      <div class="options" data-multi></div>
+    </div>
+
+    <div class="q">
+      <span class="label">18. How would your team prefer to receive training?</span>
+      <p class="hint tight">Select all that apply.</p>
+      <div class="options two" data-multi></div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT ===================== -->
+  <section class="block">
+    <div class="consent">
+      <div class="eyebrow"><span class="num">✓</span> Optional — only if you'd like a follow-up</div>
+      <p class="sub" style="margin-bottom:14px">Leave this blank to stay fully anonymous. Share it only if you'd like us to send you the summary of findings or discuss your needs.</p>
+      <div class="row2">
+        <div>
+          <label class="field-label" for="c_name">Name</label>
+          <input type="text" id="c_name" name="contact_name" autocomplete="name" />
+        </div>
+        <div>
+          <label class="field-label" for="c_org">Organisation</label>
+          <input type="text" id="c_org" name="contact_org" autocomplete="organization" />
+        </div>
+      </div>
+      <div class="row2" style="margin-top:12px">
+        <div>
+          <label class="field-label" for="c_email">Email</label>
+          <input type="email" id="c_email" name="contact_email" autocomplete="email" placeholder="name@example.com" />
+        </div>
+        <div>
+          <label class="field-label" for="c_wa">WhatsApp / phone</label>
+          <input type="text" id="c_wa" name="contact_whatsapp" inputmode="tel" placeholder="+234…" />
+        </div>
+      </div>
+      <div class="q" style="border:0;padding:14px 0 0">
+        <span class="label" style="font-size:14px">May we contact you about the findings or your PV needs?</span>
+        <div class="options two" data-single data-name="may_contact"></div>
+      </div>
+    </div>
+
+    <div class="submit-row">
+      <button type="submit" class="send" id="sendBtn">Submit my responses</button>
+      <div class="err" id="err">Please answer the required questions marked with an asterisk (*) before submitting.</div>
+      <p class="fineprint">Responses are used only to design PV support services and to compile an aggregate summary of the community's challenges. You can skip any non-required question.</p>
+    </div>
+  </section>
+
+</form>
+
+<!-- Thank-you -->
+<div class="thanks" id="thanks">
+  <div class="check">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+  </div>
+  <h2>Thank you — that's incredibly useful.</h2>
+  <p>Your responses are in. If you shared your contact details, we'll send you the aggregate findings once the survey closes. Feel free to share this survey with a colleague in the group.</p>
+</div>
+
+<footer>
+  <b>MedNova Lifesciences</b> · Pharmacovigilance & Regulatory · Lagos, Nigeria<br/>
+  This survey is for professional research purposes. Responses are handled confidentially.
+</footer>
+</div>
+
+<script>
+/* =====================================================================
+   OPTION DATA — edit wording here without touching the layout
+   ===================================================================== */
+const OPTIONS = {
+  role: ["QPPV / PV lead","Drug safety officer / associate","Regulatory affairs","Quality assurance / compliance","Medical affairs / pharmacist","Consultant / freelancer","Academic / researcher","Regulator / public health","Other"],
+  org: ["Pharma manufacturer","Importer / distributor","CRO / service provider","Hospital / clinic","Regulatory agency","NGO / donor programme","Academic / research institute","Other"],
+  years: ["Less than 1 year","1–3 years","4–7 years","8–15 years","More than 15 years"],
+  system: ["Yes — fully functional","Partially — some elements in place","No — not yet","Not sure"],
+  qppv: ["Yes","No","Planning to appoint one","Not sure"],
+  psmf: ["Yes","No","In development","Not sure"],
+  quality_bcp: ["Yes — both covered","Partially","No","Not sure"],
+  tools: ["Spreadsheets (Excel) / paper","A dedicated safety database (e.g. Argus, ArisG)","In-house / custom tool","We don't systematically capture safety data","Not sure"],
+  activities: ["ADR / ICSR case processing & reporting","Meeting regulatory reporting timelines","Aggregate reports (PSUR / PBRER)","Signal detection & management","Literature monitoring","PV audits & inspection readiness","Writing / maintaining SOPs","Staff training & competency","Risk management plans (RMPs)","Setting up a PV system from scratch"],
+  barriers: ["Budget / cost","Not enough trained staff","Lack of in-house PV expertise","Technology / no proper database","Time — competing priorities","Unclear regulatory expectations","Leadership buy-in"],
+  services: ["QPPV-as-a-service (named responsible person)","Full PV system setup (SOPs, processes)","Outsourced case processing / ICSR handling","Aggregate report writing (PSUR/PBRER)","Signal management support","Regulatory / NAFDAC submission support","PV audit & inspection-readiness","PV training & capacity building","Literature monitoring service","Fully outsourced PV function"],
+  engagement: ["One-off project","Ongoing monthly retainer","Fully outsourced / managed service","Training only","On-demand / as-needed support","Not sure yet"],
+  training_topics: [
+    "NAFDAC Good Pharmacovigilance Practice (GVP) requirements",
+    "ADR / ICSR case processing & reporting",
+    "National reporting tools (Med Safety app / VigiFlow)",
+    "Aggregate safety reports (PSUR / PBRER)",
+    "Signal detection & management",
+    "Risk management plans (RMPs)",
+    "PV SOPs & the PV System Master File (PSMF)",
+    "QPPV roles & responsibilities",
+    "Medical coding (MedDRA / WHODrug)",
+    "NAFDAC audit & inspection readiness",
+    "AEFI / vaccine safety monitoring",
+    "Pharmacovigilance in clinical trials",
+    "Literature monitoring & screening",
+    "Setting up a PV system from scratch",
+    "Basic PV awareness for sales / medical reps"
+  ],
+  training_format: ["In-person — Lagos","In-person — Abuja","Live virtual / online","Self-paced e-learning","On-site at our facility (in-house)","Blended (mix of formats)","Short webinars / lunch-and-learns","Certificate / accredited programme"],
+  scale: [["1","No systems"],["2","Early stage"],["3","Partly ready"],["4","Mostly ready"],["5","Fully ready"]],
+  may_contact: ["Yes, please","No thanks"]
+};
+
+/* map each .options container to its data source, in DOM order */
+const SINGLE_MAP = ["role","org","years","system","qppv","psmf","quality_bcp","engagement","may_contact"]; // data-single non-scale, in order they appear
+const MULTI_MAP  = ["tools","activities","barriers","services","training_topics","training_format"]; // data-multi, in order
+
+const CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+
+let uid = 0;
+function makeOption(container, name, value, type){
+  const id = "o"+(uid++);
+  const wrap = document.createElement("div");
+  wrap.className = "opt " + (type==="radio"?"radio":"check");
+  wrap.innerHTML =
+    `<input type="${type==='radio'?'radio':'checkbox'}" id="${id}" name="${name}" value="${value.replace(/"/g,'&quot;')}">
+     <label for="${id}"><span class="box">${CHECK_SVG}</span><span>${value}</span></label>`;
+  container.appendChild(wrap);
+}
+
+/* Build single-select groups (radios) */
+(function(){
+  const singles = [...document.querySelectorAll('.options[data-single], .scale[data-single]')];
+  let si = 0;
+  singles.forEach(c=>{
+    if(c.dataset.scale !== undefined){
+      const name = "readiness";
+      OPTIONS.scale.forEach(([n,t])=>{
+        const id="o"+(uid++);
+        const w=document.createElement("div");
+        w.className="opt radio";
+        w.innerHTML=`<input type="radio" id="${id}" name="${name}" value="${n}">
+          <label for="${id}"><span class="n">${n}</span><span class="t">${t}</span></label>`;
+        c.appendChild(w);
+      });
+      return;
+    }
+    const key = c.dataset.name || SINGLE_MAP[si++];
+    const name = c.dataset.name || key;
+    (OPTIONS[key]||[]).forEach(v=>makeOption(c,name,v,"radio"));
+  });
+})();
+
+/* Build multi-select groups (checkboxes) */
+(function(){
+  const multis = [...document.querySelectorAll('.options[data-multi]')];
+  multis.forEach((c,i)=>{
+    const key = MULTI_MAP[i];
+    (OPTIONS[key]||[]).forEach(v=>makeOption(c,key,v,"check"));
+    /* enforce optional max on checkboxes */
+    const max = parseInt(c.dataset.max||"0",10);
+    if(max){
+      c.addEventListener("change",()=>{
+        const boxes=[...c.querySelectorAll('input')];
+        const checked=boxes.filter(b=>b.checked);
+        boxes.forEach(b=>{ if(!b.checked) b.disabled = checked.length>=max; });
+      });
+    }
+  });
+})();
+
+/* =====================================================================
+   PROGRESS TRACKING
+   ===================================================================== */
+const form = document.getElementById("survey");
+const barFill = document.getElementById("barFill");
+const answeredEl = document.getElementById("answered");
+const totalEl = document.getElementById("total");
+
+/* a "question" = one radio group, one checkbox group, or one text/select field */
+function questionGroups(){
+  const groups = [];
+  const seenRadio = new Set();
+  const seenCheck = new Set();
+  const skip = n => n.startsWith('contact_') || n === 'may_contact'; // optional contact block isn't a numbered question
+  form.querySelectorAll('input[type=radio]').forEach(r=>{ if(!skip(r.name)&&!seenRadio.has(r.name)){seenRadio.add(r.name);groups.push({type:'radio',name:r.name});} });
+  form.querySelectorAll('input[type=checkbox]').forEach(c=>{ if(!skip(c.name)&&!seenCheck.has(c.name)){seenCheck.add(c.name);groups.push({type:'check',name:c.name});} });
+  form.querySelectorAll('textarea,select,input[type=text],input[type=email]').forEach(f=>{ if(!skip(f.name)) groups.push({type:'field',el:f}); });
+  return groups;
+}
+const GROUPS = questionGroups();
+totalEl.textContent = GROUPS.length;
+
+function isAnswered(g){
+  if(g.type==='radio') return !!form.querySelector(`input[name="${g.name}"]:checked`);
+  if(g.type==='check') return !!form.querySelector(`input[name="${g.name}"]:checked`);
+  return g.el.value.trim().length>0;
+}
+function updateProgress(){
+  const done = GROUPS.filter(isAnswered).length;
+  answeredEl.textContent = done;
+  barFill.style.width = (done/GROUPS.length*100)+"%";
+}
+form.addEventListener("input", updateProgress);
+form.addEventListener("change", updateProgress);
+updateProgress();
+
+/* =====================================================================
+   VALIDATION + SUBMIT
+   ===================================================================== */
+const REQUIRED_RADIOS = ["role","org","system","readiness"];
+const REQUIRED_MULTI  = ["services"];
+const REQUIRED_TEXT   = ["biggest_pain"];
+
+function collect(){
+  const data = {};
+  // radios + selects
+  form.querySelectorAll('select').forEach(s=>{ if(s.value) data[s.name]=s.value; });
+  const radios = new Set([...form.querySelectorAll('input[type=radio]')].map(r=>r.name));
+  radios.forEach(n=>{ const c=form.querySelector(`input[name="${n}"]:checked`); if(c) data[n]=c.value; });
+  // checkboxes -> arrays
+  const checks = new Set([...form.querySelectorAll('input[type=checkbox]')].map(c=>c.name));
+  checks.forEach(n=>{ const vals=[...form.querySelectorAll(`input[name="${n}"]:checked`)].map(c=>c.value); if(vals.length)data[n]=vals; });
+  // free text
+  form.querySelectorAll('textarea,input[type=text],input[type=email]').forEach(f=>{ if(f.value.trim())data[f.name]=f.value.trim(); });
+  data._submitted_at = new Date().toISOString();
+  return data;
+}
+
+const errEl = document.getElementById("err");
+const btn = document.getElementById("sendBtn");
+
+/* -------- OPTIONAL: send responses somewhere --------
+   To collect responses centrally, paste a form endpoint below.
+   Easiest = Formspree: create a free form at formspree.io and paste its URL,
+   e.g. "https://formspree.io/f/xxxxxxx". A Google Apps Script web-app URL works too.
+   If left blank, submissions still succeed locally and can be downloaded as JSON. */
+const FORM_ENDPOINT = "";
+
+form.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  errEl.classList.remove("show");
+
+  const missing = [];
+  REQUIRED_RADIOS.forEach(n=>{ if(!form.querySelector(`input[name="${n}"]:checked`)) missing.push(n); });
+  REQUIRED_MULTI.forEach(n=>{ if(!form.querySelector(`input[name="${n}"]:checked`)) missing.push(n); });
+  REQUIRED_TEXT.forEach(n=>{ const f=form.querySelector(`[name="${n}"]`); if(!f.value.trim()) missing.push(n); });
+
+  if(missing.length){
+    errEl.classList.add("show");
+    const first = form.querySelector(`[name="${missing[0]}"]`);
+    if(first) first.closest('.q,.block').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+
+  const data = collect();
+  btn.disabled = true; btn.textContent = "Submitting…";
+
+  try{
+    const res = await fetch("/api/survey",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(data)
+    });
+    if(!res.ok) throw new Error("Submission failed");
+
+    document.querySelector('.wrap #survey').style.display="none";
+    document.querySelector('.progress-shell').style.display="none";
+    document.getElementById("thanks").classList.add("show");
+    window.scrollTo({top:0,behavior:"smooth"});
+  }catch(err){
+    btn.disabled=false; btn.textContent="Submit my responses";
+    errEl.textContent="Something went wrong while submitting your survey. Please try again.";
+    errEl.classList.add("show");
+  }
+});
+</script>
+</body>
+</html>
