@@ -21,7 +21,7 @@ const SURVEY_HEADERS = [
   "Preferred Engagement Model",
   "Decision Factors",
   "Preferred Training Topics",
-  "Preferred Training Formats"
+  "Preferred Training Formats",
 ];
 
 const LEADS_HEADERS = [
@@ -30,7 +30,7 @@ const LEADS_HEADERS = [
   "Organisation",
   "Email",
   "WhatsApp",
-  "Permission to Contact"
+  "Permission to Contact",
 ];
 
 function doPost(e) {
@@ -49,7 +49,10 @@ function doPost(e) {
 
     return jsonResponse({ success: true });
   } catch (error) {
-    return jsonResponse({ success: false, error: String(error.message || error) });
+    return jsonResponse({
+      success: false,
+      error: String(error.message || error),
+    });
   }
 }
 
@@ -92,7 +95,7 @@ function getOrCreateSheet(name, headers) {
 
 function ensureHeaders(sheet, headers) {
   const firstRow = sheet.getRange(1, 1, 1, headers.length).getValues()[0];
-  const hasHeader = firstRow.some(cell => String(cell || "").trim() !== "");
+  const hasHeader = firstRow.some((cell) => String(cell || "").trim() !== "");
 
   if (!hasHeader) {
     sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
@@ -119,7 +122,7 @@ function buildSurveyRow(payload) {
     safeString(payload.engagement),
     safeString(payload.decision_factors),
     arrayToCsv(payload.training_topics),
-    arrayToCsv(payload.training_format)
+    arrayToCsv(payload.training_format),
   ];
 }
 
@@ -136,7 +139,7 @@ function buildLeadRow(payload) {
     safeString(contact.organisation),
     email,
     safeString(contact.whatsapp),
-    safeString(contact.permission)
+    safeString(contact.permission),
   ];
 }
 
@@ -149,13 +152,13 @@ function arrayToCsv(value) {
     return safeString(value);
   }
   return value
-    .map(item => safeString(item))
-    .filter(item => item !== "")
+    .map((item) => safeString(item))
+    .filter((item) => item !== "")
     .join(", ");
 }
 
 function jsonResponse(responseObject) {
-  return ContentService
-    .createTextOutput(JSON.stringify(responseObject))
-    .setMimeType(ContentService.MimeType.JSON);
+  return ContentService.createTextOutput(
+    JSON.stringify(responseObject),
+  ).setMimeType(ContentService.MimeType.JSON);
 }

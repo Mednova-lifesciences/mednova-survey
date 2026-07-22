@@ -181,22 +181,22 @@ module.exports = async (req, res) => {
       throw new Error(`Google Sheets submission failed: ${googleResponse.status} ${errorText}`);
     }
 
-    if (hasContactEmail) {
-      console.log("Sending notification email to internal team:", process.env.NOTIFICATION_EMAIL);
-      try {
-        const notifResp = await resend.emails.send({
-          from: process.env.FROM_EMAIL,
-          to: process.env.NOTIFICATION_EMAIL,
-          subject: "New Pharmacovigilance Survey Lead",
-          text: buildPlainContactMessage(contact),
-          html: buildHtmlContactMessage(contact)
-        });
-        console.log("Notification email response:", JSON.stringify(notifResp));
-      } catch (err) {
-        console.error("Notification email error:", formatError(err));
-        throw err;
-      }
+    console.log("Sending notification email to internal team:", process.env.NOTIFICATION_EMAIL);
+    try {
+      const notifResp = await resend.emails.send({
+        from: process.env.FROM_EMAIL,
+        to: process.env.NOTIFICATION_EMAIL,
+        subject: "New Pharmacovigilance Survey Lead",
+        text: buildPlainContactMessage(contact),
+        html: buildHtmlContactMessage(contact)
+      });
+      console.log("Notification email response:", JSON.stringify(notifResp));
+    } catch (err) {
+      console.error("Notification email error:", formatError(err));
+      throw err;
+    }
 
+    if (hasContactEmail) {
       console.log("Sending confirmation email to respondent:", contact.email);
       try {
         const confirmResp = await resend.emails.send({
@@ -211,7 +211,7 @@ module.exports = async (req, res) => {
         throw err;
       }
     } else {
-      console.log("No contact email provided; skipping email send.");
+      console.log("No contact email provided; skipping confirmation email.");
     }
 
     return res.status(200).json({ success: true });
